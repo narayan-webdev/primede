@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socialseller Order Confirmation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #fff; /* Light background color */
+        color: #333; /* Dark text color */
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #f4f4f4; /* Slightly lighter background color */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        /* display: flex; */
+        /* flex-direction: row; */
+        align-items: center;
+      }
+
+      h1 {
+        color: #ff9900;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .order-info {
+        margin-bottom: 20px;
+        /* display: flex; */
+        /* flex-wrap: wrap; */
+        justify-content: space-between;
+      }
+
+      .order-info div {
+        margin-bottom: 10px;
+        width: 80%; /* Adjusted width for side-by-side display */
+      }
+
+      .order-summary {
+        border-top: 1px solid #ddd; /* Border color */
+        margin-top: 20px;
+        padding-top: 10px;
+      }
+
+      .order-summary div {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff9900;
+        color: #fff; /* Light button text color */
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        color: #333; /* Dark text color for table */
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd; /* Border color */
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f4f4f4; /* Lighter background color for header */
+      }
+
+      .logo {
+        max-width: 100px;
+        margin-right: 10px;
+      }
+
+      .product-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .product-info img {
+        max-width: 100px;
+        margin-right: 10px;
+      }
+
+      .product-name {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .summary-heading {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333; /* Dark text color for heading */
+      }
+
+      .summary-detail {
+        font-size: 16px;
+        color: #666; /* Darker text color for details */
+      }
+
+      .summary-total {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333; /* Dark text color for total */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        class="logo"
+        src="https://socialseller.in/socialseller/images/Logo.png"
+        alt="Socialseller Logo"
+      />
+
+      <h1>Order Confirmation</h1>
+
+      <div class="order-info">
+        <div>Socialseller.in</div>
+        <div>Your Orders | Your Account | Socialseller.in</div>
+        <div>
+          <strong>Order Confirmation</strong>
+        </div>
+        <div>Order # <%= slug %></div>
+        <div>Hello <%= name %>,</div>
+        <div></div>
+        <div>
+          Thank you for your order. We’ll send a confirmation when your order
+          ships. Your order is currently in transit.
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <div class="summary-heading">Order summary</div>
+
+        <!-- Product Details -->
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Brand</th>
+            <th>Qty</th>
+            <th>Price</th>
+          </tr>
+          <tr>
+            <td style="display: flex">
+              <img
+                class="logo"
+                src="https://th.bing.com/th?id=OPA.c%2bHs8CyDLqt3TQ474C474&w=592&h=550&o=5&pid=21.1"
+                alt="Product Image"
+              />
+              Mid-Wash Slim Fit Denim Shorts
+            </td>
+            <td>DNMX</td>
+            <td>1</td>
+            <td>₹ 519.6</td>
+          </tr>
+          <tr>
+            <td style="display: flex">
+              <img
+                class="logo"
+                src="https://th.bing.com/th?id=OPA.VrF56B%2bkPQkh5A474C474&w=592&h=550&o=5&dpr=1.3&pid=21.1"
+                alt="Product Image"
+              />
+              Mid-Wash Slim Fit Denim Shorts
+            </td>
+            <td>H&M</td>
+            <td>1</td>
+            <td>₹ 699.9</td>
+          </tr>
+        </table>
+
+        <!-- Other summary details -->
+        <div class="summary-detail">Item Subtotal: Rs.<%= price %></div>
+        <div class="summary-detail">Shipping & Handling: Rs.40.00</div>
+        <div class="summary-detail">Promotion Applied: -Rs.<%= discount %></div>
+        <div class="summary-total">Order Total: Rs.<%= price - discount %></div>
+        <div class="summary-detail">
+          Payment Pending: Rs.<%= price - discount %>
+        </div>
+      </div>
+
+      <div>
+        If you use a mobile device, you can receive notifications about the
+        delivery of your package and track it from our free Socialseller app.
+      </div>
+
+      <div>
+        To ensure your safety, the Delivery Agent will drop the package at your
+        doorstep, ring the doorbell and then move back to maintain adequate
+        distance while waiting for you to collect your package.
+      </div>
+
+      <div>We hope to see you again soon.</div>
+
+      <div>Socialseller.in</div>
+
+      <div>
+        <a href="#" class="button">View or Manage Order</a>
+      </div>
+    </div>
+  </body>
+</html>

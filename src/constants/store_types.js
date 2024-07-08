@@ -1,0 +1,1 @@
+export default ["B2B", "ECOMMERCE", "RESELLER-ECOMMERCE", "WHATSAPP", "LANDING"]

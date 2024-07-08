@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Hello world!</title>
+    <!-- <link href="https://fonts.cdnfonts.com/css/dollar-bill" rel="stylesheet"> -->
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            border: 1px solid black;
+            padding: 1rem;
+
+        }
+
+        section {
+            width: 670px;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .sub-total {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="container">
+        <table style="margin-bottom: 10px;">
+            <tr>
+                <td style="float: left; border: none;">
+                    <strong>Billed To:</strong>
+                    <p>{{name}}</p>
+                    <p>{{phone}}</p>
+                </td>
+                <td style="float: right; border: none;">
+                    <p>Invoice No. {{invoice_number}}</p>
+                    <p>Date - {{invoice_date}}</p>
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <table>
+            <tr>
+                <th>Amount</th>
+                <th>Payment ID</th>
+                <th>Valid From</th>
+                <th>Valid To</th>
+                <th>Plan</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>{{amount}}</td>
+                <td>{{payment_id}}</td>
+                <td>{{valid_from}}</td>
+                <td>{{valid_to}}</td>
+                <td>{{plan}}</td>
+                <td>{{status}}</td>
+            </tr>
+        </table>
+        <footer
+            style="text-align: center; border-top: 1px solid black; margin-top: 1rem;background-color: black; color: white; padding: 4px 0;">
+            Thank You
+        </footer>
+    </section>
+</body>
+
+</html>

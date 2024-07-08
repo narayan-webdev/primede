@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proudct Catalog</title>
+</head>
+
+<body>
+    <h1 style=" text-align: center; background-color: rgb(210, 210, 210); padding: 2px 2px;">Product Catalog</h1>
+    <section style="display: flex;gap: 1rem;">
+        {{#each products}}
+        <div style="height: 800px; margin-left: auto; margin-right: auto;">
+            <img style="width: auto; display: block; margin: auto; height: 100%; object-fit: contain;"
+                src="{{this.thumbnail.url}}">
+            <h6>{{this}}</h6>
+            <div
+                style="display: block; margin: auto; background-color: rgb(210, 210, 210); padding: 2px 12px; margin-top: 1rem;">
+                <h2 style="margin-bottom: 1rem;">{{this.name}}</h2>
+                <h3>{{this.thumbnail}}</h3>
+                <h3>{{this.price}}</h3>
+            </div>
+        </div>
+        {{/each}}
+    </section>
+</body>
+
+</html>
