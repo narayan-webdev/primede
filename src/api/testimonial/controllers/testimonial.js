@@ -2,6 +2,7 @@
 import { errorResponse, tokenError } from "../../../services/errorResponse.js";
 import { verify } from "../../../services/jwt.js";
 import Testimonial from "../models/testimonial.js";
+import User from './../../user/models/user.js';
 
 export async function create(req, res) {
     try {

@@ -3,6 +3,7 @@ import { getPagination, getMeta } from "../../../services/pagination.js";
 
 import { errorResponse } from "../../../services/errorResponse.js";
 import Story from "../models/story.js";
+import Product from './../../product/models/product.js';
 
 export async function create(req, res) {
     try {
@@ -26,7 +27,7 @@ export async function find(req, res) {
     try {
 
         const story = await Story.findAll({
-            include: ["video", "thumbnail", { model: sequelize.models.Product, as: "products", include: ['thumbnail', "variants"] }]
+            include: ["video", "thumbnail", { model: Product, as: "products", include: ['thumbnail', "variants"] }]
         });
         return res.status(200).send({ data: story });
     } catch (error) {
@@ -40,7 +41,7 @@ export async function findOne(req, res) {
 
         const { id } = req.params
         const story = await Story.findByPk(id, {
-            include: ["video", "thumbnail", { model: sequelize.models.Product, as: "products", include: ['thumbnail', "variants"] }]
+            include: ["video", "thumbnail", { model: Product, as: "products", include: ['thumbnail', "variants"] }]
         });
         if (!story) {
             return res.status(400).send(errorResponse({ message: "Invalid ID" }))

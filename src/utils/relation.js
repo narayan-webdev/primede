@@ -146,6 +146,7 @@ Product.hasOne(Product_metrics, { foreignKey: "ProductId", as: "product_metrics"
 // ############## testimonials ###############
 Testimonial.belongsTo(User, { foreignKey: "UserId", as: "user" })
 Testimonial.belongsTo(Media, { foreignKey: "VideoId", as: "video" })
+db.Testimonial.belongsTo(db.Media, { foreignKey: "ThumbnailId", as: "thumbnail" })
 
 //############# story and products
 Story.belongsTo(Media, { foreignKey: "VideoId", as: "video" });

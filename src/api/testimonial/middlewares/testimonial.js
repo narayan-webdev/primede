@@ -8,6 +8,8 @@ export async function validateRequest(req, res, next) {
             "content": Joi.string().required(),
             "rating": Joi.number().min(1).max(5).required(),
             "VideoId": Joi.number().positive().optional().allow(null),
+            "name": Joi.string().required(),
+            "ThumbnailId": Joi.number().optional()
         });
         return JoiSchema.validate(body);
     }

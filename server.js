@@ -9,8 +9,7 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization", "authorization"]
 }))
 app.use((req,res,next) => {
-    let api = req.url.split("?")[0];
-    req.api = api;
+    req.api = req.url.split("?")[0];
     next()
 })
 app.use(express.json({ limit: "10mb" }))

@@ -4,12 +4,6 @@ import { errorResponse } from "../../../services/errorResponse.js";
 export async function validateRequest(req, res, next) {
   function validate(body) {
     const JoiSchema = Joi.object({
-      store_type: Joi.string().valid(
-        "WHATSAPP",
-        "B2B",
-        "ECOMMERCE",
-        "RESELLER_ECOM"
-      ).optional(),
       primary_color: Joi.string().optional(),
       secondary_color: Joi.string().optional(),
       bg_color: Joi.string().optional(),
@@ -29,6 +23,10 @@ export async function validateRequest(req, res, next) {
       category_card_style: Joi.string().valid("LANDSCAPE", "SQUARE").optional(),
       product_list_span_mobile: Joi.number().integer().optional(),
       product_list_span_desktop: Joi.number().integer().optional(),
+      show_marquee: Joi.boolean().optional(),
+      show_collection: Joi.boolean().optional(),
+      show_banner: Joi.boolean().optional(),
+      show_stories: Joi.boolean().optional()
     });
 
     return JoiSchema.validate(body);

@@ -2,9 +2,6 @@ import { DataTypes } from "sequelize";
 import store_types from "../../../constants/store_types.js";
 import sequelize from '../../../../database/index.js';
 const Setting = sequelize.define("Setting", {
-  store_type: {
-    type: DataTypes.ENUM(...store_types),
-  },
   primary_color: {
     type: DataTypes.STRING,
   },

@@ -37,7 +37,7 @@ export async function find(req, res) {
     const pagination = await getPagination(query.pagination);
 
     const variants = await Variant.findAndCountAll({
-      include: ["thumbnail", "product", "gallery", "bulk_pricings"],
+      include: ["thumbnail", "product", "gallery"],
       offset: pagination.offset,
       limit: pagination.limit,
     });
@@ -57,7 +57,7 @@ export async function findOne(req, res) {
 
     const { id } = req.params;
     const variant = await Variant.findByPk(id, {
-      include: ["thumbnail", "product", "gallery", "bulk_pricings"],
+      include: ["thumbnail", "product", "gallery"],
     });
     if (variant) {
       return res.status(200).send(variant);
@@ -76,49 +76,49 @@ export async function update(req, res) {
 
     const { id } = req.params;
     const body = req.body;
-  
+
     // Find the variant by id
     const variant = await Variant.findByPk(id);
     if (!variant) {
       return res.status(404).send(errorResponse({ message: "Variant not found" }));
     }
-  
+
     // Update the variant
     const [updatedRowsCount, updatedVariants] = await Variant.update(body, {
       where: { id },
       returning: true,
       transaction: t,
     });
-  
+
     if (updatedRowsCount === 0) {
       return res.status(404).send(errorResponse({ message: "Variant not found" }));
     }
-  
+
     // Handle variant gallery updates
     if (body.gallery && body.gallery.length > 0) {
       const variantMedia = await Variant_gallery.findAll({
         where: { VariantId: id },
         transaction: t,
       });
-  
+
       const oldMediaIds = variantMedia.map((entry) => entry.MediaId);
       const newMediaIds = body.gallery;
-  
+
       const mediaToAdd = newMediaIds.filter((mediaId) => !oldMediaIds.includes(mediaId));
       const mediaToRemove = oldMediaIds.filter((mediaId) => !newMediaIds.includes(mediaId));
-  
+
       // Remove old media entries
       await Variant_gallery.destroy({
         where: { MediaId: mediaToRemove },
         transaction: t,
       });
-  
+
       // Add new media entries
       const mediaToAddBulk = mediaToAdd.map((mediaId) => ({
         VariantId: id,
         MediaId: mediaId,
       }));
-  
+
       await Variant_gallery.bulkCreate(mediaToAddBulk, { transaction: t });
     }
     await t.commit();
