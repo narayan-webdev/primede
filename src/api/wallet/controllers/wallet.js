@@ -12,6 +12,7 @@ import { default as axios } from "axios";
 import { IntraktNotify } from "../../../services/notification.js";
 import User from "../../user/models/user.js";
 import Wallet from "../models/wallet.js";
+import Global from './../../global/models/global.js';
 
 export async function create(req, res) {
   const t = await req.db.transaction();
@@ -50,7 +51,7 @@ export async function create(req, res) {
       transaction: t,
       txn_type: txn_type.DEBIT,
     });
-    await tenantMetric({ subdomain: req.subdomain, field_name: tenant_metric_fields.total_transaction });
+    // await tenantMetric({ subdomain: req.subdomain, field_name: tenant_metric_fields.total_transaction });
     await t.commit();
     return res.status(200).send({ data: wallet });
   } catch (error) {
@@ -147,7 +148,7 @@ export async function withdraw(req, res) {
     const body = req.body;
     let fund_account
 
-    const global = await Store_global.findOne();
+    const global = await Global.findOne();
     const storeUser = await User.findByPk(token.id, { raw: true })
     if (global.dataValues.selected_payment_gateway === "NONE") {
       return res.status(400).send(errorResponse({ message: "you can not withdraw wallet money , please use them for purchase" }))

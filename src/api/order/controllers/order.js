@@ -647,10 +647,10 @@ export const checkOutWallet = async (req, res) => {
       });
 
 
-      await tenantMetric({
-        subdomain: req.subdomain,
-        field_name: tenant_metric_fields.total_orders,
-      });
+      // await tenantMetric({
+      //   subdomain: req.subdomain,
+      //   field_name: tenant_metric_fields.total_orders,
+      // });
 
       let orderVariantIds = await orderVariant.map((variant) => {
         return variant.id;

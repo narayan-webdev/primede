@@ -36,7 +36,7 @@ export async function create(req, res) {
     const lead = await Lead.create({ ...body, type: "HOT_LEAD", status: "OPEN" }, { transaction: t });
 
     await createActivityLog({ sequelize, UserId: token.id, event: activity_event.NEW_LEAD_ADDED, transaction: t });
-    await tenantMetric({ subdomain: req.subdomain, field_name: tenant_metric_fields.total_leads });
+    // await tenantMetric({ subdomain: req.subdomain, field_name: tenant_metric_fields.total_leads });
     await t.commit();
     return res.status(201).send({
       message: "Lead created successfully!",

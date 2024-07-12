@@ -31,6 +31,7 @@ import Product_metrics from './../../product_metrics/models/product_metrics.js';
 import Variant from './../../variant/models/variant.js';
 import Transaction from './../../transaction/models/transaction.js';
 import Order from './../../order/models/order.js';
+import Global from './../../global/models/global.js';
 
 export async function create(req, res) {
   const transaction = await sequelize.transaction();
@@ -75,7 +76,7 @@ export async function create(req, res) {
     // };
 
     // const sendMessage = await firebaseAdmin.messaging().send(message);
-    await tenantMetric({ subdomain: req.subdomain, field_name: tenant_metric_fields.total_users });
+    // await tenantMetric({ subdomain: req.subdomain, field_name: tenant_metric_fields.total_users });
     const emailsend = mailSender({ to: email, subject: "Your account has been created ", html: renderedContent });
     await transaction.commit();
     return res.status(200).send({ message: "User Store Created Successfully!", data: { name, email, phone } });
@@ -848,7 +849,7 @@ export async function setOTP(req, res) {
     await findUser.save();
     // await findUser.update({ otp: otp, otp_expiration: otp_expiration })
 
-    const global = await Store_global.findOne();
+    const global = await Global.findOne();
 
     // const templateID = "656ec220d6fc0550c2082f12";275588AIHmHWVyjtu5cd18c59
 
