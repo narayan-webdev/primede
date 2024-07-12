@@ -5,7 +5,7 @@ import RBAC from "../../../middlewares/RBAC.js";
 
 // Define routes for the "Post" resource
 export default (app) => {
-  router.post("/", [RBAC], create);
+  router.post("/", [], create);
   router.get("/", [], find);
   router.get("/:id", [], findOne);
   router.put("/:id", [RBAC], update);

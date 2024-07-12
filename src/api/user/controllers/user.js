@@ -30,8 +30,7 @@ import Return_order from './../../return_order/models/return_order.js';
 import Product_metrics from './../../product_metrics/models/product_metrics.js';
 import Variant from './../../variant/models/variant.js';
 import Transaction from './../../transaction/models/transaction.js';
-
-
+import Order from './../../order/models/order.js';
 
 export async function create(req, res) {
   const transaction = await sequelize.transaction();
@@ -215,7 +214,6 @@ export async function login(req, res) {
     });
 
     if (!findUser) { return res.status(400).send(errorResponse({ status: 404, message: "User Not Found!" })); }
-    const isPremium = await isPremiumUser({ id: findUser.dataValues.id, sequelize })
     const isMatched = await compare(password, findUser.dataValues.password);
     if (!isMatched) {
       return res.status(404).send(errorResponse({ status: 404, message: "Invalid Credentials!" }));
@@ -223,7 +221,7 @@ export async function login(req, res) {
     const token = issue({ id: findUser.id });
     await createActivityLog({ sequelize, event: activity_event.USER_LOG_IN, UserId: findUser.id });
     delete findUser.password;
-    return res.status(200).send({ data: { jwt: token, user: { ...findUser.dataValues, isPremium } } });
+    return res.status(200).send({ data: { jwt: token, user: findUser } });
   } catch (error) {
     console.log(error);
     return res.status(500).send(errorResponse({ status: 500, message: error.message }));
@@ -236,7 +234,7 @@ export async function adminLogin(req, res) {
 
     const findAdmin = await User.findOne({
       where: { email: email },
-      include: ['avatar', { model: sequelize.models.Role, as: "role", where: { name: "Admin" } }]
+      include: ['avatar', { model: Role, as: "role", where: { name: "Admin" } }]
     });
 
     if (!findAdmin) { return res.status(400).send(errorResponse({ status: 404, message: "User Not Found!" })); }
@@ -266,27 +264,8 @@ export async function getMe(req, res) {
       attributes: { exclude: ["password", "password_reset_token"] },
       include: ["addresses", "avatar"],
     });
-    const subscriptions = await Store_subscription.findAll({ where: { UserId: token.id, status: "ACTIVE" }, order: [["valid_to", "asc"]], include: ["plan"] })
-    const currentDate = new Date();
-    let isPremium;
-    if (subscriptions.length) {
-      const expiredSubscriptions = subscriptions.filter((subscription) => {
-        const validToDate = new Date(subscription.valid_to);
-        return validToDate < currentDate;
-      });
-      // isPremium = await isPremiumUser({ id: token.id, sequelize })
-      // findUser.isPremium = true
-      await findUser.save();
-      // const expiredSubscriptionIds = expiredSubscriptions.map((subscription) => subscription.id);
-      // await Store_subscription.update({ status: "EXPIRED" },
-      // {
-      //   where: { id: expiredSubscriptionIds }
-      // });
-    } else {
-      findUser.isPremium = false
-      await findUser.save()
-    }
-    return res.status(200).send({ data: { ...findUser.dataValues, subscription: (subscriptions.length ? subscriptions[0] : "no active subscriptions") } });
+
+    return res.status(200).send({ data: findUser });
   } catch (error) {
     console.log(error);
     return res.status(500).send(errorResponse({ status: 500, message: "Internal server Error" }));
@@ -396,7 +375,7 @@ export async function dashboard(req, res) {
       out_of_stock,
       // payouts
     ] = await Promise.all([
-      await Order_variant.count({ where: whereClause, include: [{ model: sequelize.models.Order, as: "order", where: { is_paid: true } }] }),
+      await Order_variant.count({ where: whereClause, include: [{ model: Order, as: "order", where: { is_paid: true } }] }),
       await Product.count({ where: { is_active: true, ...whereClause } }),
       await Category.count(),
       await User.count({ where: whereClause }),
@@ -496,7 +475,7 @@ export async function stafflogin(req, res) {
 }
 
 export async function staffRegister(req, res) {
-  const transaction = await req.db.transaction();
+  const transaction = await sequelize.transaction();
   try {
     //get details from body
 
@@ -558,17 +537,16 @@ export async function staffRegister(req, res) {
 export async function staffListings(req, res) {
   try {
 
-    const models = sequelize.models;
     const order = orderBy(req.query);
     const pagination = await getPagination(req.query.pagination);
-    const users = await models.User.findAndCountAll({
+    const users = await User.findAndCountAll({
       order: order,
       limit: pagination.limit,
       offset: pagination.offset,
       attributes: ["id", "name", "email"],
       include: [
         {
-          model: models.Role,
+          model: Role,
           as: "role",
           where: { name: { [Op.in]: ["Admin", "Staff"] } },
           attributes: ["name"],
@@ -585,7 +563,7 @@ export async function staffListings(req, res) {
 }
 
 export async function updateStaff(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const id = req.params.id;
@@ -594,7 +572,7 @@ export async function updateStaff(req, res) {
     const staff = await User.findByPk(id, {
       include: [
         {
-          model: sequelize.models.Role,
+          model: Role,
           as: "role",
           where: { name: "Staff" },
         },
@@ -644,7 +622,7 @@ export async function updateStaff(req, res) {
 }
 
 export async function updateAdmin(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const id = req.params.id;
@@ -653,7 +631,7 @@ export async function updateAdmin(req, res) {
     const Admin = await User.findByPk(id, {
       include: [
         {
-          model: sequelize.models.Role,
+          model: Role,
           as: "role",
           where: { name: "Super_Admin" },
         },
@@ -686,7 +664,7 @@ export async function deleteStaff(req, res) {
     const staff = await User.findByPk(id, {
       include: [
         {
-          model: sequelize.models.Role,
+          model: Role,
           as: "role",
           where: { name: "Staff" },
         },
@@ -739,7 +717,7 @@ export async function searchStaff(req, res) {
       },
       include: [
         {
-          model: sequelize.models.Role,
+          model: Role,
           as: "role",
           where: { name: { [Op.in]: ["Super_Admin", "Staff"] } },
           attributes: ["name"],
@@ -761,18 +739,18 @@ export async function searchStaff(req, res) {
 //     const models = sequelize.models;
 //     const id = req.params.id
 //     const order = orderBy(req.query);
-//     const users = await models.User.findByPk(id, {
+//     const users = await User.findByPk(id, {
 //       order: order,
 //       attributes: ["id", "name", "email"],
 //       include: [
 //         {
-//           model: models.Role,
+//           model: Role,
 //           as: "role",
 //           where: { name: { [Op.in]: ["Super_Admin", "Staff"] } },
 //           attributes: ["name"],
 //         },
 //         {
-//           model: models.Permission,
+//           model: Permission,
 //           as: "permissions",
 //           attributes: ["id", "api", "endpoint", "method", "handler",],
 //         },
@@ -807,13 +785,13 @@ export async function fullDetail(req, res) {
           ],
           include: [
             {
-              model: sequelize.models.Order,
+              model: Order,
               as: "order", where: { "UserId": id },
             },
             {
-              model: sequelize.models.Variant,
+              model: Variant,
               as: "variant",
-              include: [{ model: sequelize.models.Media, as: "thumbnail", attributes: ["id", "url"] }, { model: sequelize.models.Product, as: "product", attributes: ["id", "name"] }],
+              include: [{ model: Media, as: "thumbnail", attributes: ["id", "url"] }, { model: Product, as: "product", attributes: ["id", "name"] }],
             },
           ]
         })

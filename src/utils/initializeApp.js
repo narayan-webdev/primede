@@ -25,7 +25,6 @@ export default async (sequelize) => {
     // console.log(roles)
     const SuperAdminRole = roles.find((item) => item.name === "Super_Admin")
     const ConumerRole = roles.find((item) => item.name === "Consumer")
-    console.log(ConumerRole)
     SuperAdmin[0].RoleId = SuperAdminRole?.id
     await SuperAdmin[0].save();
 
