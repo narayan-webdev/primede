@@ -40,7 +40,9 @@ export async function validateRequest(req, res, next) {
       personal_id: Joi.string().optional(),
       prepaid_discount: Joi.number().positive().optional(),
       prepaid_discount_type: Joi.string().valid("PRICE", "PERCENTAGE").optional(),
-      facebook_pixel: Joi.string().optional()
+      facebook_pixel: Joi.string().optional(),
+      msg91_template_id:Joi.string().optional(),
+      msg91_api_key:Joi.string().optional(),
     });
 
     return JoiSchema.validate(body);

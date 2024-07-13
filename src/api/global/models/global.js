@@ -4,11 +4,6 @@ import sequelize from "../../../../database/index.js";
 const Global = sequelize.define(
   "Global",
   {
-    subscription_price: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-      allowNull: true,
-    },
     cod_enabled: {
       type: DataTypes.BOOLEAN,
       allowNull: true,

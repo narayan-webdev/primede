@@ -847,11 +847,10 @@ export async function setOTP(req, res) {
     findUser.otp = otp;
     findUser.otp_expiration = otp_expiration;
     await findUser.save();
-    // await findUser.update({ otp: otp, otp_expiration: otp_expiration })
 
     const global = await Global.findOne();
 
-    // const templateID = "656ec220d6fc0550c2082f12";275588AIHmHWVyjtu5cd18c59
+    const templateID = "656ec220d6fc0550c2082f12";
 
     const url = process.env.MSG91_URL;
 
@@ -935,12 +934,11 @@ export async function verifyOTP(req, res) {
     if (findUser.otp_expiration < Date.now()) {
       return res.status(400).send(errorResponse({ message: "OTP Expired" }))
     }
-    const isPremium = await isPremiumUser({ id: findUser.dataValues.id, sequelize })
     await findUser.update({ otp: null })
     const token = issue({ id: findUser.id });
     await createActivityLog({ sequelize, event: activity_event.USER_LOG_IN, UserId: findUser.id });
     delete findUser.password;
-    return res.status(200).send({ data: { jwt: token, user: { ...findUser.dataValues, isPremium } } });
+    return res.status(200).send({ data: { jwt: token, user: findUser } });
   } catch (error) {
     console.log(error);
     return res.status(500).send(errorResponse({ status: 500, message: error.message }));

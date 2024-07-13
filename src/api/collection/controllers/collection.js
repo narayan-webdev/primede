@@ -9,6 +9,7 @@ import { IntraktNotify } from "../../../services/notification.js";
 import Collection from "../models/collection.js";
 import sequelize from './../../../../database/index.js';
 import Product from "../../product/models/product.js";
+import Variant from "../../variant/models/variant.js";
 
 const CollectionProduct = sequelize.models.CollectionProduct;
 

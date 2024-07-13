@@ -4,7 +4,7 @@ const User = sequelize.define("User", {
   name: {
     type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: "Unknown"
+    defaultValue: "Guest"
   },
   username: {
     type: DataTypes.STRING,
