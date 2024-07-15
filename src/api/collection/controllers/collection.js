@@ -222,7 +222,7 @@ export async function getProductsByCollection(req, res) {
               },
             },
           }),
-          include: ["gallery", "thumbnail", "bulk_pricings"],
+          include: ["gallery", "thumbnail",],
         },
         "tags",
         "gallery",

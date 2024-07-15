@@ -162,7 +162,7 @@ export async function findOneStoreUser(req, res) {
               include: ["category", "sub_category", "thumbnail", "gallery"]
             },
             "thumbnail",
-            "gallery", "bulk_pricings"]
+            "gallery",]
         },
         {
           model: Order,

@@ -69,7 +69,7 @@ Variant.belongsTo(AttributeValue, { foreignKey: "SecondaryAttributeId", as: "sec
 Tag.belongsToMany(Product, { as: "products", through: ProductTag });
 Product.belongsToMany(Tag, { as: "tags", through: ProductTag });
 
-// Variant.hasMany(Bulk_pricing, { foreignKey: "VariantId", as: "bulk_pricings" });
+// Variant.hasMany(Bulk_pricing, { foreignKey: "VariantId", as:  });
 // Bulk_pricing.belongsTo(Variant, { foreignKey: "VariantId", as: "variants" });
 
 Collection.belongsToMany(Product, { as: "products", through: "CollectionProduct" });
