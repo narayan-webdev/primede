@@ -156,7 +156,6 @@ export async function getProducts(req, res) {
             },
           }),
           include: ["gallery",
-            { model: Variant_gallery, as: "gallery", attributes: ["id", "url"] },
             { model: Media, as: "thumbnail", attributes: ["id", "url"] },],
         },
         "tags",
