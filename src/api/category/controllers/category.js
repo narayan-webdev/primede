@@ -159,8 +159,8 @@ export async function getProducts(req, res) {
             { model: Media, as: "thumbnail", attributes: ["id", "url"] },],
         },
         "tags",
-        { model: Product_gallery, as: "gallery", attributes: ["id", "url"] },
         { model: Media, as: "thumbnail", attributes: ["id", "url"] },
+        "gallery",
         "sub_category",
         "category",
         "collections"
