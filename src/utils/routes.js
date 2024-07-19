@@ -6,6 +6,7 @@ import banner from "../api/banner/routes/banner.js";
 import campaign from "../api/campaign/routes/campaign.js";
 import cart from "../api/cart/routes/cart.js";
 import category from "../api/category/routes/category.js";
+import category_type from "../api/category_type/routes/category_type.js";
 import collection from "../api/collection/routes/collection.js";
 import custom_courier from "../api/custom_courier/routes/custom_courier.js";
 import global from "../api/global/routes/global.js";
@@ -51,6 +52,7 @@ banner(app);
 campaign(app);
 cart(app);
 category(app);
+category_type(app)
 collection(app);
 custom_courier(app);
 global(app);

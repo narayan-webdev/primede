@@ -158,7 +158,7 @@ export async function update(req, res) {
 
 
 export const _delete = async (req, res) => {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const { id } = req.params;

@@ -1,7 +1,7 @@
 import fs from "fs";
-import { join } from "path";
+import path, { join } from "path";
 import { launch } from "puppeteer";
-import { Op, literal, or, where } from "sequelize";
+import { Op, json, literal, or, where } from "sequelize";
 import { getPagination, getMeta } from "../../../services/pagination.js";
 import { errorResponse } from "../../../services/errorResponse.js";
 import bulkTag from "../services/blukTag.js";
@@ -31,6 +31,7 @@ import Attribute from "../../variant/models/attribute.js";
 import AttributeValue from "../../variant/models/attributevalue.js";
 import Coupon from "../../coupon/models/coupon.js";
 import Tag from "../../tag/models/tag.js";
+import { converToJson, convertToOriginalStructure } from "../services/converter.js";
 const Product_gallery = sequelize.models.Product_gallery;
 const Variant_gallery = sequelize.models.Variant_gallery;
 const CollectionProduct = sequelize.models.CollectionProduct;
@@ -189,7 +190,8 @@ export async function find(req, res) {
         "sub_category",
         "category",
         "collections",
-        "product_metrics"
+        "product_metrics",
+        "size_chart"
         // {
         //   model:  Product_review, as: "product_reviews",
         //   attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'average_rating']],
@@ -275,6 +277,11 @@ export async function findOne(req, res) {
         {
           model: Media,
           as: "thumbnail",
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        },
+        {
+          model: Media,
+          as: "size_chart",
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
@@ -394,7 +401,7 @@ export async function findOne(req, res) {
 }
 
 export async function update(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
     const { id } = req.params;
     const body = req.body;
@@ -1055,5 +1062,257 @@ export async function productImport(req, res) {
     return res.status(200).send({ message: "product imported" })
   } catch (error) {
     return res.status(500).send(errorResponse({ message: error.message, status: 500 }))
+  }
+}
+
+export async function bulkUpdate(req, res) {
+  const t = await sequelize.transaction();
+  try {
+    const body = req.body;
+    const [rows, [updated]] = await Product.update(body, {
+      where: { id: { [Op.in]: body.products } },
+      returning: true,
+      transaction: t,
+    });
+    await t.commit();
+    return res.status(200).send({
+      message: "Product updated successfully!",
+      data: updated,
+    });
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    return res.status(500).send(errorResponse({ status: 500, message: "Internal server Error" }));
+  }
+}
+
+export async function bulkUpload(req, res) {
+  const t = await sequelize.transaction();
+  try {
+
+    const jsonoutput = await converToJson(path.join(process.cwd(), req.file.path))
+    const outputArray = convertToOriginalStructure(jsonoutput)
+    console.log(jsonoutput)
+    const array =  [
+      {
+          "name": "WNESY Women's Rayon Nyra Cut Printed Embrodery Dark Blue Flared Kurti Pant With Dupatta Set",
+          "description": "urta Set Fabric: Cotton Blend || Kurta Set Color :- Blue Style: Straight || Length: Calf Length || Sleeves: 3/4 Sleeves",
+          "short_description": "",
+          "is_active": "true",
+          "cod_enabled": "true",
+          "product_return": "true",
+          "shipping_value": "100",
+          "enquiry_enabled": "true",
+          "show_price": "true",
+          "shipping_value_type": "SHIPPING_PRICE",
+          "yt_video_link": "",
+          "rating": "4.5",
+          "createdAt": "2024-07-03T10:19:45.474Z",
+          "updatedAt": "2024-07-19T07:47:34.602Z",
+          "CategoryId": "1",
+          "SubCategoryId": "1",
+          "ThumbnailId": "1",
+          "SizeChartId": "",
+          "ratings": "null",
+          "variants": [
+              {
+                  "name": "GoSriKi Women's Cotton Blend Straight Printed Kurta",
+                  "price": "1900",
+                  "strike_price": "1900",
+                  "quantity": "10",
+                  "ProductId": "10",
+                  "PrimaryAttributeId": "29",
+                  "SecondaryAttributeId": "31",
+                  "ThumbnailId": "4",
+                  "thumbnail": {
+                      "name": "",
+                      "url": "null"
+                  },
+                  "gallery": [
+                      {
+                          "name": "asdf",
+                          "url": "null"
+                      },
+                      {
+                          "name": "adsfs",
+                          "url": "null"
+                      },
+                      {
+                          "name": "ss",
+                          "url": "null"
+                      }
+                  ],
+                  "primary_attribute": {
+                      "value": "blue",
+                      "hex_code": "#FFFFFF",
+                      "AttributeId": "29",
+                      "attribute": {
+                          "name": "color"
+                      }
+                  },
+                  "secondary_attribute": {
+                      "value": "M",
+                      "hex_code": "null",
+                      "AttributeId": "31",
+                      "attribute": {
+                          "name": "size"
+                      }
+                  }
+              },
+              {
+                  "name": "GoSriKi Women's Cotton Blend Straight Printed Kurta",
+                  "price": "1900",
+                  "strike_price": "1900",
+                  "quantity": "10",
+                  "ProductId": "10",
+                  "PrimaryAttributeId": "29",
+                  "SecondaryAttributeId": "32",
+                  "ThumbnailId": "4",
+                  "thumbnail": {
+                      "name": "",
+                      "url": "null"
+                  },
+                  "gallery": [
+                      {
+                          "name": "asdf",
+                          "url": "null"
+                      },
+                      {
+                          "name": "adsfs",
+                          "url": "null"
+                      },
+                      {
+                          "name": "ss",
+                          "url": "null"
+                      }
+                  ],
+                  "primary_attribute": {
+                      "value": "blue",
+                      "hex_code": "#FFFFFF",
+                      "AttributeId": "29",
+                      "attribute": {
+                          "name": "color"
+                      }
+                  },
+                  "secondary_attribute": {
+                      "value": "L",
+                      "hex_code": "null",
+                      "AttributeId": "32",
+                      "attribute": {
+                          "name": "size"
+                      }
+                  }
+              }
+          ],
+          "thumbnail": {
+              "name": "",
+              "url": "null"
+          },
+          "category": {
+              "name": "apple"
+          },
+          "sub_category": {
+              "name": "shirt"
+          },
+          "tags": [
+              {
+                  "name": "kurta"
+              },
+              {
+                  "name": "women"
+              }
+          ],
+          "gallery": [
+              {
+                  "name": "asdf",
+                  "url": "null"
+              },
+              {
+                  "name": "adsfs",
+                  "url": "null"
+              },
+              {
+                  "name": "ss",
+                  "url": "null"
+              }
+          ]
+      }
+  ]
+    for (const body of array) {
+      const product = await Product.create(body, { transaction: t });
+      for (const variant of body.variants) {
+        //primary attribute 
+        const primary_attribute = await Attribute.create({ name: variant.primary_attribute.attribute.name }, { transaction: t })
+        const primary_attribute_value = await AttributeValue.create({
+          value: variant.primary_attribute.value,
+          hex_code: variant.primary_attribute.hex_code,
+          AttributeId: primary_attribute.id
+        }, { transaction: t })
+
+        // secondary attribute 
+        const secondary_attribute = await Attribute.create({ name: variant.secondary_attribute.attribute.name }, { transaction: t })
+        const secondary_attribute_value = await AttributeValue.create({
+          value: variant.secondary_attribute.value,
+          hex_code: variant.secondary_attribute.hex_code,
+          AttributeId: secondary_attribute.id
+        }, { transaction: t })
+
+        //variant
+        const newVariant = await Variant.create({
+          name: variant.name,
+          price: +variant.price,
+          strike_price: variant.price,
+          quantity: +variant.quantity,
+          ProductId: product.id,
+          from: variant.from,
+          to: variant.to,
+          ThumbnailId: +variant.ThumbnailId,
+          PrimaryAttributeId: primary_attribute_value.id,
+          SecondaryAttributeId: secondary_attribute_value.id
+        }, { transaction: t })
+
+        // variants gallery 
+        if (variant.gallery && variant.gallery.length) {
+          const VGarray = variant.gallery.map((item) => {
+            return { MediaId: item, VariantId: newVariant.id };
+          })
+          await Variant_gallery.bulkCreate(VGarray, { transaction: t })
+        }
+      }
+
+      if (body?.CollectionId) {
+        await CollectionProduct.create({ ProductId: product.id, CollectionId: body.CollectionId }, { transaction: t })
+      }
+      await Product_metric.create({ ProductId: product.id }, { transaction: t })
+
+      // product gellery
+      if (body.gallery.length) {
+        const obj = body.gallery.flatMap((item) => {
+          return { MediaId: item, ProductId: product.id };
+        });
+        await Product_gallery.bulkCreate(obj, { transaction: t });
+      }
+      const tags = body.tags;
+      let createdTags;
+      if (tags && tags.length > 0) {
+        createdTags = await bulkTag({
+          sequelize,
+          tags,
+          ProductId: product.id,
+          transaction: t,
+        });
+      }
+   
+    }
+    await t.commit();
+
+    return res.status(200).send({
+      message: "Product updated successfully!",
+      data: JSON.parse(JSON.stringify(outputArray)),
+    });
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    return res.status(500).send(errorResponse({ status: 500, message: "Internal server Error" }));
   }
 }

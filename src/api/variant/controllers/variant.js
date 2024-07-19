@@ -5,11 +5,46 @@ import sequelize from "../../../../database/index.js";
 const Variant_gallery = sequelize.models.Variant_gallery;
 
 export async function create(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
-    const variant = await Variant.create(req.body, { transaction: t });
     const body = req.body;
+
+    const primary_attribute = await Attribute.create({ name: variant.primary.name }, { transaction: t })
+    const primary_attribute_value = await AttributeValue.create({
+      value: variant.primary.values.value,
+      hex_code: variant.primary.values.hex_code,
+      AttributeId: primary_attribute.id
+    }, { transaction: t })
+
+    // secondary attribute 
+    const secondary_attribute = await Attribute.create({ name: variant.secondary.name }, { transaction: t })
+    const secondary_attribute_value = await AttributeValue.create({
+      value: variant.secondary.values.value,
+      hex_code: variant.secondary.values.hex_code,
+      AttributeId: secondary_attribute.id
+    }, { transaction: t })
+
+    //variant
+    // const newVariant = await Variant.create({
+    //   name: variant.name,
+    //   price: variant.price,
+    //   strike_price: variant.price,
+    //   quantity: variant.quantity,
+    //   ProductId: product.id,
+    //   from: variant.from,
+    //   to: variant.to,
+    //   ThumbnailId: variant.ThumbnailId,
+    //   PrimaryAttributeId: primary_attribute_value.id,
+    //   SecondaryAttributeId: secondary_attribute_value.id
+    // }, { transaction: t })
+
+    const variant = await Variant.create({
+      ...req.body, PrimaryAttributeId: primary_attribute_value.id,
+      SecondaryAttributeId: secondary_attribute_value.id
+    }, { transaction: t });
+    // variants gallery 
+
 
     let variant_gallery_body = [];
     if (body.gallery && body.gallery.length) {
@@ -71,7 +106,7 @@ export async function findOne(req, res) {
 }
 
 export async function update(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const { id } = req.params;

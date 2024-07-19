@@ -15,7 +15,7 @@ import Wallet from "../models/wallet.js";
 import Global from './../../global/models/global.js';
 
 export async function create(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const { UserId, amount, remark } = req.body;
@@ -141,7 +141,7 @@ const _delete = async (req, res) => {
 export { _delete as delete };
 
 export async function withdraw(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const token = verify(req)

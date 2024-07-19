@@ -12,6 +12,10 @@ const Product = sequelize.define("Product", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  short_description: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   is_active: {
     type: DataTypes.BOOLEAN,
     allowNull: true,

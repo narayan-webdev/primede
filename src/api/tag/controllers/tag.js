@@ -7,7 +7,7 @@ import blukTag from "../../product/services/blukTag.js";
 
 
 export async function create(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const createdTags = blukTag({ tags: req.body.tags, ProductId: req.body.ProductId, transaction: t })

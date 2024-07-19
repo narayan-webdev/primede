@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import StoreRBAC from "../../../middlewares/StoreRBAC.js";
-import { create, update, find, findOne, _delete } from "../controllers/sub_category.js";
+import { create, update, find, findOne, _delete, findProducts } from "../controllers/sub_category.js";
 import { validateCreateRequest, validateUpdateRequest } from "../middlewares/sub_category.js";
 
 const permissions = [
@@ -41,6 +41,7 @@ export default (app) => {
   router.post("/", [StoreRBAC, validateCreateRequest], create);
   router.put("/:id", [StoreRBAC, validateUpdateRequest], update);
   router.get("/", [], find);
+  router.get("/:id/products", [], findProducts);
   router.get("/:id", [], findOne);
   router.delete("/:id", [StoreRBAC], _delete);
 

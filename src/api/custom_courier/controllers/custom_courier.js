@@ -5,7 +5,7 @@ import { getPagination, getMeta } from "../../../services/pagination.js";
 import Custom_courier from "../models/custom_courier.js";
 
 export async function create(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
 
@@ -51,7 +51,7 @@ export async function create(req, res) {
 }
 
 export async function productReturn(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
 

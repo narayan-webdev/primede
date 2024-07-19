@@ -507,7 +507,7 @@ export async function stats(req, res) {
 }
 
 export async function acceptOrder(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const token = verify(req);
@@ -555,7 +555,7 @@ export async function acceptOrder(req, res) {
 }
 
 export async function declineOrder(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const token = verify(req);
@@ -604,7 +604,7 @@ export async function declineOrder(req, res) {
 }
 
 export async function cancelOrder(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const token = verify(req);
@@ -640,7 +640,7 @@ export async function cancelOrder(req, res) {
 }
 
 export async function deliverOrder(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const token = verify(req);
@@ -700,7 +700,7 @@ export async function deliverOrder(req, res) {
 }
 
 export async function declineReturn(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const OrderVariant = Order_variant;
@@ -742,7 +742,7 @@ export async function declineReturn(req, res) {
 }
 
 export async function returnRequest(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const OrderVariant = Order_variant;

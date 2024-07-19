@@ -14,7 +14,7 @@ import { Super_Admin } from "../../../constants/permissions.js";
 import User from "../../user/models/user.js";
 
 export async function create(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const { username, email, password } = req.body;
@@ -398,7 +398,7 @@ export async function stafflogin(req, res) {
   }
 }
 export async function staffRegister(req, res) {
-  const transaction = await req.db.transaction();
+  const transaction = await sequelize.transaction();
   try {
     //get details from body
     const { username, password, email, permissions } = req.body;
@@ -513,7 +513,7 @@ export async function findOne(req = request, res = response) {
   }
 }
 export async function updateStaff(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const id = req.params.id;
@@ -570,7 +570,7 @@ export async function updateStaff(req, res) {
   }
 }
 export async function updateAdmin(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const id = req.params.id;

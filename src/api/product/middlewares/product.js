@@ -9,8 +9,10 @@ export async function validateCreateBody(req, res, next) {
   const body = req.body;
   const JoiSchema = Joi.object({
     name: Joi.string().required(),
+    short_description: Joi.string().optional(),
     description: Joi.string().required(),
     ThumbnailId: Joi.number().required(),
+    SizeChartId: Joi.number().optional(),
     CategoryId: Joi.number().required(),
     SubCategoryId: Joi.number().optional(),
     rating: Joi.number().positive().optional().max(5),
@@ -43,9 +45,7 @@ export async function validateCreateBody(req, res, next) {
           premiumPrice: Joi.number().optional()
         })).optional().allow(null)
       })
-    )
-      .required()
-      .min(1),
+    ).required().min(1),
     tags: Joi.array().items(Joi.string()).optional(),
     gallery: Joi.array().items(Joi.number()).allow(),
     shipping_value: Joi.number().optional(),
@@ -71,7 +71,7 @@ export async function validateCreateBody(req, res, next) {
   if (result.error) {
     return res.status(400).send(errorResponse({ message: result.error.message, details: result.error.details }));
   } else {
-    next(); // Corrected the square brackets to curly braces
+    next();
   }
 }
 export async function validateUpdateBody(req, res, next) {
@@ -79,7 +79,9 @@ export async function validateUpdateBody(req, res, next) {
   const JoiSchema = Joi.object({
     name: Joi.string().optional(),
     description: Joi.string().optional(),
+    short_description: Joi.string().optional(),
     ThumbnailId: Joi.number().optional(),
+    SizeChartId: Joi.number().optional(),
     CategoryId: Joi.number().optional(),
     SubCategoryId: Joi.number().optional(),
     gallery: Joi.array().items(Joi.number()).allow(null),
@@ -89,11 +91,11 @@ export async function validateUpdateBody(req, res, next) {
     CollectionStaticId: Joi.number().optional(),
     rating: Joi.number().positive().optional().max(5),
     yt_video_link: Joi.string().optional().allow(""),
-    "is_active": Joi.boolean().optional(),
-    "cod_enabled": Joi.boolean().optional(),
-    "product_return": Joi.boolean().optional(),
-    "enquiry_enabled": Joi.boolean().optional(),
-    "show_price": Joi.boolean().optional(),
+    is_active: Joi.boolean().optional(),
+    cod_enabled: Joi.boolean().optional(),
+    product_return: Joi.boolean().optional(),
+    enquiry_enabled: Joi.boolean().optional(),
+    show_price: Joi.boolean().optional(),
   });
 
   let result = JoiSchema.validate(req.body);
@@ -179,5 +181,24 @@ export async function importFromShopify(req, res, next) {
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
+  }
+}
+export async function productBulkUpdate(req, res, next) {
+  const body = req.body;
+  const JoiSchema = Joi.object({
+    "shipping_value": Joi.number().optional(),
+    "shipping_value_type": Joi.string().valid("SHIPPING_PRICE", "SHIPPING_PERCENTAGE", "FREE_SHIPPING").optional(),
+    "is_active": Joi.boolean().optional(),
+    "cod_enabled": Joi.boolean().optional(),
+    "product_return": Joi.boolean().optional(),
+    "enquiry_enabled": Joi.boolean().optional(),
+    "products": Joi.array().items(Joi.number()).min(1)
+  });
+
+  let result = JoiSchema.validate(body);
+  if (result.error) {
+    return res.status(400).send(errorResponse({ message: result.error.message, details: result.error.details }));
+  } else {
+    next(); // Corrected the square brackets to curly braces
   }
 }

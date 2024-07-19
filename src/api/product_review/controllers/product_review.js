@@ -6,7 +6,7 @@ import Product_review from "../models/product_review.js";
 import sequelize from "../../../../database/index.js";
 const Product_review_gallery = sequelize.models.Product_review_gallery;
 export async function create(req, res) {
-    const t = await req.db.transaction();
+    const t = await sequelize.transaction();
     try {
 
         const body = req.body;

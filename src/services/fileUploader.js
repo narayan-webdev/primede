@@ -9,7 +9,7 @@ const storage = diskStorage({
     destination: 'public/uploads',
     filename: (req, file, cb) => {
 
-        originalname = file.originalname.split(" ").join("_")
+        const originalname = file.originalname.split(" ").join("_")
         const uniqueSuffix = randomBytes(16).toString('hex');
         const extname = _extname(originalname);
         const filename = `${originalname}-${uniqueSuffix}${extname}`;

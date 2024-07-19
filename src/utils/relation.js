@@ -52,6 +52,8 @@ import sequelize from "../../database/index.js";
 import User_product from "../api/product/models/user_product.js";
 import Attribute from "../api/variant/models/attribute.js";
 import AttributeValue from "../api/variant/models/attributevalue.js";
+import Category_type from "../api/category_type/models/category_type.js";
+
 
 // #################### Product , Variant , Tag ,Bulk Pricing and Collection and Collection_static Association #################
 Attribute.hasMany(AttributeValue, { foreignKey: "AttributeId", as: "values" })
@@ -114,6 +116,7 @@ Permission.belongsToMany(Role, { as: "roles", through: Role_permission });
 Category.belongsTo(Media, { foreignKey: "ThumbnailId", as: "thumbnail" });
 Sub_category.belongsTo(Media, { foreignKey: "ThumbnailId", as: "thumbnail" });
 Product.belongsTo(Media, { foreignKey: "ThumbnailId", as: "thumbnail" });
+Product.belongsTo(Media, { foreignKey: "SizeChartId", as: "size_chart" });
 Variant.belongsTo(Media, { foreignKey: "ThumbnailId", as: "thumbnail" });
 
 Product.belongsToMany(Media, { foreignKey: "ProductId", through: "Product_gallery", as: "gallery" });
@@ -146,7 +149,7 @@ Product.hasOne(Product_metrics, { foreignKey: "ProductId", as: "product_metrics"
 // ############## testimonials ###############
 Testimonial.belongsTo(User, { foreignKey: "UserId", as: "user" })
 Testimonial.belongsTo(Media, { foreignKey: "VideoId", as: "video" })
-db.Testimonial.belongsTo(db.Media, { foreignKey: "ThumbnailId", as: "thumbnail" })
+Testimonial.belongsTo(Media, { foreignKey: "ThumbnailId", as: "thumbnail" })
 
 //############# story and products
 Story.belongsTo(Media, { foreignKey: "VideoId", as: "video" });
@@ -210,5 +213,10 @@ Coupon.belongsTo(Media, {
   foreignKey: "MediaId",
   as: "image",
 });
+
+Category_type.hasMany(Category, { foreignKey: "CategoryTypeId", as: "categories" })
+Category.belongsTo(Category_type, { foreignKey: "CategoryTypeId", as: "categor_type" })
+
+Category_type.belongsTo(Media, { foreignKey: "ThumbnailId", as: "thumbnail" })
 
 // await sequelize.sync({ alter: true });

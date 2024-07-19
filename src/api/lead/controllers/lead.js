@@ -17,7 +17,7 @@ import Lead from "../models/lead.js";
 
 
 export async function create(req, res) {
-  const t = await req.db.transaction();
+  const t = await sequelize.transaction();
   try {
 
     const body = req.body;
