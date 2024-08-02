@@ -7,7 +7,7 @@ const Address = sequelize.define("Address", {
   },
   houseNumber: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   addressLine1: {
     type: DataTypes.STRING,

@@ -235,6 +235,10 @@ export const checkOut = async (req, res) => {
 
       PG_used = global.selected_payment_gateway
 
+      if (req.body.payment_mode === "COD" && payableAmount === 0) {
+        PG_used = "FREE_COD"
+      }
+
       switch (PG_used) {
         case "RAZORPAY":
           console.log("PG STORE");
@@ -270,6 +274,10 @@ export const checkOut = async (req, res) => {
               enabled: true,
             },
           });
+          break;
+        case "FREE_COD":
+          rzOrder = {};
+          rzOrder.id = generateOrderId("ORD")
           break;
 
         default:

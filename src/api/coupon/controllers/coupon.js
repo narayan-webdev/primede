@@ -38,7 +38,8 @@ export async function find(req, res) {
     const coupons = await Coupon.findAndCountAll({
       offset: pagination.offset,
       limit: pagination.limit,
-      order: order
+      order: order,
+      include: ["image"]
     });
     const meta = await getMeta(pagination, coupons.count);
     return res.status(200).send({ data: coupons.rows, meta });

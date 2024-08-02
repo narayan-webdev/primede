@@ -8,6 +8,7 @@ async function validateCreateRequest(req, res, next) {
     const JoiSchema = Joi.object({
       name: Joi.string().required(),
       ThumbnailId: Joi.number().optional(),
+      CategoryTypeId: Joi.number().optional()
     });
     return JoiSchema.validate(body);
   }
@@ -30,6 +31,7 @@ async function validateUpdateRequest(req, res, next) {
     const JoiSchema = Joi.object({
       name: Joi.string().optional(),
       ThumbnailId: Joi.number().optional(),
+      CategoryTypeId: Joi.number().optional()
     });
     return JoiSchema.validate(body);
   }

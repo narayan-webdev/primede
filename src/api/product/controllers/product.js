@@ -64,7 +64,7 @@ export async function create(req, res) {
       const newVariant = await Variant.create({
         name: variant.name,
         price: variant.price,
-        strike_price: variant.price,
+        strike_price: variant.strike_price,
         quantity: variant.quantity,
         ProductId: product.id,
         from: variant.from,
@@ -181,7 +181,7 @@ export async function find(req, res) {
               },
             }),
           },
-          attributes: ["name", "id"],
+          attributes: ["name", "id", "price", "strike_price", "quantity", "is_active"],
           include: ["gallery", "thumbnail", "primary_attribute", "secondary_attribute"],
         },
         // "tags",
@@ -1093,151 +1093,151 @@ export async function bulkUpload(req, res) {
     const jsonoutput = await converToJson(path.join(process.cwd(), req.file.path))
     const outputArray = convertToOriginalStructure(jsonoutput)
     console.log(jsonoutput)
-    const array =  [
+    const array = [
       {
-          "name": "WNESY Women's Rayon Nyra Cut Printed Embrodery Dark Blue Flared Kurti Pant With Dupatta Set",
-          "description": "urta Set Fabric: Cotton Blend || Kurta Set Color :- Blue Style: Straight || Length: Calf Length || Sleeves: 3/4 Sleeves",
-          "short_description": "",
-          "is_active": "true",
-          "cod_enabled": "true",
-          "product_return": "true",
-          "shipping_value": "100",
-          "enquiry_enabled": "true",
-          "show_price": "true",
-          "shipping_value_type": "SHIPPING_PRICE",
-          "yt_video_link": "",
-          "rating": "4.5",
-          "createdAt": "2024-07-03T10:19:45.474Z",
-          "updatedAt": "2024-07-19T07:47:34.602Z",
-          "CategoryId": "1",
-          "SubCategoryId": "1",
-          "ThumbnailId": "1",
-          "SizeChartId": "",
-          "ratings": "null",
-          "variants": [
-              {
-                  "name": "GoSriKi Women's Cotton Blend Straight Printed Kurta",
-                  "price": "1900",
-                  "strike_price": "1900",
-                  "quantity": "10",
-                  "ProductId": "10",
-                  "PrimaryAttributeId": "29",
-                  "SecondaryAttributeId": "31",
-                  "ThumbnailId": "4",
-                  "thumbnail": {
-                      "name": "",
-                      "url": "null"
-                  },
-                  "gallery": [
-                      {
-                          "name": "asdf",
-                          "url": "null"
-                      },
-                      {
-                          "name": "adsfs",
-                          "url": "null"
-                      },
-                      {
-                          "name": "ss",
-                          "url": "null"
-                      }
-                  ],
-                  "primary_attribute": {
-                      "value": "blue",
-                      "hex_code": "#FFFFFF",
-                      "AttributeId": "29",
-                      "attribute": {
-                          "name": "color"
-                      }
-                  },
-                  "secondary_attribute": {
-                      "value": "M",
-                      "hex_code": "null",
-                      "AttributeId": "31",
-                      "attribute": {
-                          "name": "size"
-                      }
-                  }
-              },
-              {
-                  "name": "GoSriKi Women's Cotton Blend Straight Printed Kurta",
-                  "price": "1900",
-                  "strike_price": "1900",
-                  "quantity": "10",
-                  "ProductId": "10",
-                  "PrimaryAttributeId": "29",
-                  "SecondaryAttributeId": "32",
-                  "ThumbnailId": "4",
-                  "thumbnail": {
-                      "name": "",
-                      "url": "null"
-                  },
-                  "gallery": [
-                      {
-                          "name": "asdf",
-                          "url": "null"
-                      },
-                      {
-                          "name": "adsfs",
-                          "url": "null"
-                      },
-                      {
-                          "name": "ss",
-                          "url": "null"
-                      }
-                  ],
-                  "primary_attribute": {
-                      "value": "blue",
-                      "hex_code": "#FFFFFF",
-                      "AttributeId": "29",
-                      "attribute": {
-                          "name": "color"
-                      }
-                  },
-                  "secondary_attribute": {
-                      "value": "L",
-                      "hex_code": "null",
-                      "AttributeId": "32",
-                      "attribute": {
-                          "name": "size"
-                      }
-                  }
-              }
-          ],
-          "thumbnail": {
+        "name": "WNESY Women's Rayon Nyra Cut Printed Embrodery Dark Blue Flared Kurti Pant With Dupatta Set",
+        "description": "urta Set Fabric: Cotton Blend || Kurta Set Color :- Blue Style: Straight || Length: Calf Length || Sleeves: 3/4 Sleeves",
+        "short_description": "",
+        "is_active": "true",
+        "cod_enabled": "true",
+        "product_return": "true",
+        "shipping_value": "100",
+        "enquiry_enabled": "true",
+        "show_price": "true",
+        "shipping_value_type": "SHIPPING_PRICE",
+        "yt_video_link": "",
+        "rating": "4.5",
+        "createdAt": "2024-07-03T10:19:45.474Z",
+        "updatedAt": "2024-07-19T07:47:34.602Z",
+        "CategoryId": "1",
+        "SubCategoryId": "1",
+        "ThumbnailId": "1",
+        "SizeChartId": "",
+        "ratings": "null",
+        "variants": [
+          {
+            "name": "GoSriKi Women's Cotton Blend Straight Printed Kurta",
+            "price": "1900",
+            "strike_price": "1900",
+            "quantity": "10",
+            "ProductId": "10",
+            "PrimaryAttributeId": "29",
+            "SecondaryAttributeId": "31",
+            "ThumbnailId": "4",
+            "thumbnail": {
               "name": "",
               "url": "null"
-          },
-          "category": {
-              "name": "apple"
-          },
-          "sub_category": {
-              "name": "shirt"
-          },
-          "tags": [
+            },
+            "gallery": [
               {
-                  "name": "kurta"
+                "name": "asdf",
+                "url": "null"
               },
               {
-                  "name": "women"
+                "name": "adsfs",
+                "url": "null"
+              },
+              {
+                "name": "ss",
+                "url": "null"
               }
-          ],
-          "gallery": [
-              {
-                  "name": "asdf",
-                  "url": "null"
-              },
-              {
-                  "name": "adsfs",
-                  "url": "null"
-              },
-              {
-                  "name": "ss",
-                  "url": "null"
+            ],
+            "primary_attribute": {
+              "value": "blue",
+              "hex_code": "#FFFFFF",
+              "AttributeId": "29",
+              "attribute": {
+                "name": "color"
               }
-          ]
+            },
+            "secondary_attribute": {
+              "value": "M",
+              "hex_code": "null",
+              "AttributeId": "31",
+              "attribute": {
+                "name": "size"
+              }
+            }
+          },
+          {
+            "name": "GoSriKi Women's Cotton Blend Straight Printed Kurta",
+            "price": "1900",
+            "strike_price": "1900",
+            "quantity": "10",
+            "ProductId": "10",
+            "PrimaryAttributeId": "29",
+            "SecondaryAttributeId": "32",
+            "ThumbnailId": "4",
+            "thumbnail": {
+              "name": "",
+              "url": "null"
+            },
+            "gallery": [
+              {
+                "name": "asdf",
+                "url": "null"
+              },
+              {
+                "name": "adsfs",
+                "url": "null"
+              },
+              {
+                "name": "ss",
+                "url": "null"
+              }
+            ],
+            "primary_attribute": {
+              "value": "blue",
+              "hex_code": "#FFFFFF",
+              "AttributeId": "29",
+              "attribute": {
+                "name": "color"
+              }
+            },
+            "secondary_attribute": {
+              "value": "L",
+              "hex_code": "null",
+              "AttributeId": "32",
+              "attribute": {
+                "name": "size"
+              }
+            }
+          }
+        ],
+        "thumbnail": {
+          "name": "",
+          "url": "null"
+        },
+        "category": {
+          "name": "apple"
+        },
+        "sub_category": {
+          "name": "shirt"
+        },
+        "tags": [
+          {
+            "name": "kurta"
+          },
+          {
+            "name": "women"
+          }
+        ],
+        "gallery": [
+          {
+            "name": "asdf",
+            "url": "null"
+          },
+          {
+            "name": "adsfs",
+            "url": "null"
+          },
+          {
+            "name": "ss",
+            "url": "null"
+          }
+        ]
       }
-  ]
+    ]
     for (const body of array) {
       const product = await Product.create(body, { transaction: t });
       for (const variant of body.variants) {
@@ -1302,7 +1302,7 @@ export async function bulkUpload(req, res) {
           transaction: t,
         });
       }
-   
+
     }
     await t.commit();
 

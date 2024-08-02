@@ -16,6 +16,7 @@ import Variant from "../../variant/models/variant.js";
 import Product from "../../product/models/product.js";
 import Order from "../../order/models/order.js";
 import Order_variant from "../models/order_variant.js";
+import sequelize from "../../../../database/index.js";
 
 // ordersController.js
 

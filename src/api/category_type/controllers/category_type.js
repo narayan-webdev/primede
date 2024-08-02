@@ -37,17 +37,16 @@ export async function find(req, res) {
         {
           model: Media, as: "thumbnail", attributes: ["id", "url"]
         },
-        {
-          model: Category, as: "categories",
-          include: ["subCategories"]
-        }
+        // {
+        //   model: Category, as: "categories",
+        //   include: ["subCategories"]
+        // }
       ],
-      // attributes: {
-      //   include: [
-      //     [sequelize.literal('(SELECT COUNT(*) FROM "Categories" WHERE "Categories"."CategoryTypeId" = "Category_type"."id")'), "categories"],
-      //     // [sequelize.literal('(SELECT COUNT(*) FROM "Sub_categories" WHERE "Sub_categories"."CategoryId" = "Category"."id")'), "sub_categories"],
-      //   ],
-      // },
+      attributes: {
+        include: [
+          [sequelize.literal('(SELECT COUNT(*) FROM "Categories" WHERE "Categories"."CategoryTypeId" = "Category_type"."id")'), "categories"],
+        ],
+      },
 
     });
     return res.status(200).send({ data: category_types });
@@ -62,19 +61,19 @@ export async function findOne(req, res) {
 
     const { id } = req.params;
     const category = await Category_type.findByPk(id, {
-      // include: [
-      //   {
-      //     model: Media, as: "thumbnail", attributes: ["id", "url"]
-      //   },
-      //   {
-      //     model: Sub_category, as: "subCategories", include: [{ model: Media, as: "thumbnail", attributes: ["id", "url"] }]
-      //   }
-      // ],
-      attributes: {
-        include: [
-          [sequelize.literal('(SELECT COUNT(*) FROM "Categories" WHERE "Categories"."CategoryTypeId" = "Category_type"."id")'), "categories"],
-        ],
-      },
+      include: [
+        {
+          model: Media, as: "thumbnail", attributes: ["id", "url"]
+        },
+        {
+          model: Category, as: "categories", include: [{ model: Media, as: "thumbnail", attributes: ["id", "url"] }]
+        }
+      ],
+      // attributes: {
+      //   include: [
+      //     [sequelize.literal('(SELECT COUNT(*) FROM "Categories" WHERE "Categories"."CategoryTypeId" = "Category_type"."id")'), "categories"],
+      //   ],
+      // },
     });
     if (!category) {
       return res.status(404).send(errorResponse({ status: 404, message: "Category not found!", details: "Category ID seems to be invalid" }));
@@ -223,5 +222,31 @@ export async function searchInCategory(req, res) {
   } catch (error) {
     console.log(error);
     return res.status(500).send(errorResponse({ status: 500, message: "some internal server error occured!" }))
+  }
+}
+
+export async function getMenus(req, res) {
+  try {
+    const category_types = await Category_type.findAll({
+      include: [
+        {
+          model: Media, as: "thumbnail", attributes: ["id", "url"]
+        },
+        {
+          model: Category, as: "categories",
+          include: ["subCategories"]
+        }
+      ],
+      // attributes: {
+      //   include: [
+      //     [sequelize.literal('(SELECT COUNT(*) FROM "Categories" WHERE "Categories"."CategoryTypeId" = "Category_type"."id")'), "categories"],
+      //   ],
+      // },
+
+    });
+    return res.status(200).send({ data: category_types });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(errorResponse({ status: 500, message: "some internal server error occured!" }));
   }
 }

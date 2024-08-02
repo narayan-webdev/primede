@@ -21,11 +21,11 @@ export function convertToOriginalStructure(data) {
                 show_price: item.show_price,
                 shipping_value_type: item.shipping_value_type,
                 yt_video_link: item.yt_video_link,
-                rating: +item.rating,
-                CategoryId: +item.CategoryId,
-                SubCategoryId: +item.SubCategoryId,
-                ThumbnailId: +item.ThumbnailId,
-                SizeChartId: +item.SizeChartId,
+                rating: item.rating,
+                CategoryId: item.CategoryId,
+                SubCategoryId: item.SubCategoryId,
+                ThumbnailId: item.ThumbnailId,
+                SizeChartId: item.SizeChartId,
                 ratings: item.ratings,
                 variants: [],
                 thumbnail: {
@@ -50,13 +50,13 @@ export function convertToOriginalStructure(data) {
 
         productMap[item.id].variants.push({
             name: item.variant_name,
-            price: +item.variant_price,
-            strike_price: +item.variant_strike_price,
-            quantity: +item.variant_quantity,
-            ProductId: +item.id,
+            price: item.variant_price,
+            strike_price: item.variant_strike_price,
+            quantity: item.variant_quantity,
+            ProductId: item.id,
             PrimaryAttributeId: item.PrimaryAttributeId,
             SecondaryAttributeId: item.SecondaryAttributeId,
-            ThumbnailId: +item.variant_thumbnail_id,
+            ThumbnailId: item.variant_thumbnail_id,
             thumbnail: {
                 name: item.variant_thumbnail_name,
                 url: item.variant_thumbnail_url

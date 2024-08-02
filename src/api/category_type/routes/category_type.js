@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import RBAC from "../../../middlewares/RBAC.js";
-import { create, find, findOne, update, _delete, getProducts, searchInCategory } from "../controllers/category_type.js";
+import { create, find, findOne, update, _delete, getProducts, searchInCategory, getMenus } from "../controllers/category_type.js";
 import { validateCreateRequest, validateUpdateRequest } from "../middlewares/category_type.js";
 
 const permissions = [
@@ -52,6 +52,7 @@ const permissions = [
 export default (app) => {
   router.post("/", [validateCreateRequest], create);
   router.get("/", find);
+  router.get("/menus", getMenus);
   router.get("/:id", findOne);
   router.put("/:id", [validateUpdateRequest], update);
   router.delete("/:id", _delete);
