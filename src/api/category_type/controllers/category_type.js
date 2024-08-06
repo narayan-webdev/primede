@@ -37,10 +37,6 @@ export async function find(req, res) {
         {
           model: Media, as: "thumbnail", attributes: ["id", "url"]
         },
-        // {
-        //   model: Category, as: "categories",
-        //   include: ["subCategories"]
-        // }
       ],
       attributes: {
         include: [
@@ -66,14 +62,15 @@ export async function findOne(req, res) {
           model: Media, as: "thumbnail", attributes: ["id", "url"]
         },
         {
-          model: Category, as: "categories", include: [{ model: Media, as: "thumbnail", attributes: ["id", "url"] }]
+          model: Category,
+          as: "categories",
+          attributes: {
+            include: [
+              [sequelize.literal('(SELECT COUNT(*) FROM "Sub_categories" WHERE "Sub_categories"."CategoryId" = "categories"."id")'), "sub_category_count"],
+            ],
+          }
         }
       ],
-      // attributes: {
-      //   include: [
-      //     [sequelize.literal('(SELECT COUNT(*) FROM "Categories" WHERE "Categories"."CategoryTypeId" = "Category_type"."id")'), "categories"],
-      //   ],
-      // },
     });
     if (!category) {
       return res.status(404).send(errorResponse({ status: 404, message: "Category not found!", details: "Category ID seems to be invalid" }));

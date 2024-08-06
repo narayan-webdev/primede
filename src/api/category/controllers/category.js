@@ -58,7 +58,12 @@ export async function findOne(req, res) {
           model: Media, as: "thumbnail", attributes: ["id", "url"]
         },
         {
-          model: Sub_category, as: "subCategories", include: [{ model: Media, as: "thumbnail", attributes: ["id", "url"] }]
+          model: Sub_category, as: "subCategories",
+          attributes: {
+            include: [
+              [sequelize.literal('(SELECT COUNT(*) FROM "Products" WHERE "Products"."SubCategoryId" = "subCategories"."id")'), "product_count"],
+            ],
+          }
         }
       ],
       attributes: {
